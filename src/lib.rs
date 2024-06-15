@@ -21,10 +21,10 @@ pub fn web_editor(dom: &str) -> Result<(), JsValue> {
     let toolbar = document.create_element("div").unwrap(); //툴바의 부모 div
     toolbar.set_class_name("wasm-toolbar"); //css를 위해 클래스를 설정해줌.
 
-    let textleft = document.create_element("button").unwrap();     //document.createElement('button')
+    let textleft = document.create_element("button").unwrap();     // document.createElement('button')
     textleft.set_class_name("toolbar-menu text-align-left");                // textleft.className
-    textleft.set_inner_html(&"왼");                                         //textleft.setInnerHtml
-    toolbar.append_child(&textleft);                                        //toolbar.appendChild
+    textleft.set_inner_html(&"왼");                                         // textleft.setInnerHtml
+    toolbar.append_child(&textleft);                                        // toolbar.appendChild
 
     let textleft = document.create_element("button").unwrap();
     textleft.set_class_name("toolbar-menu text-align-left");
