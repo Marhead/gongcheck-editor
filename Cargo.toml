@@ -2,6 +2,8 @@
 name = "gongcheck-editor"
 version = "0.1.0"
 edition = "2021"
+description = "Rich text editor for WASM"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib"]
