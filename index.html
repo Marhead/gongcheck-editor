@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+    </head>
+    <body>
+        <h1>WASM Test</h1>
+        <div id="WebEditor"></div>
+        <script type="module">
+            import init, * as Editor from './pkg/gongcheck_editor.js';
+            async function execute() {
+                console.log(Editor);
+                await init();
+                var test = Editor.WebEditor("#WebEditor");
+            }
+            execute();
+        </script>
+        <!-- <script type="module">
+
+        import init, { add } from './pkg/gongcheck_editor.js';
+
+        async function run() {
+
+            await init();
+
+            const result = add(1, 2);
+            console.log(`1 + 2 = ${result}`);
+            if (result !== 3)
+            throw new Error("wasm addition doesn't work!");
+        }
+
+        run();
+        </script> -->
+
+    </body>
+</html>
