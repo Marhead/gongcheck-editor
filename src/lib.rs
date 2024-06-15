@@ -6,8 +6,8 @@ use wasm_bindgen::JsCast;
 
 #[wasm_bindgen(js_name = WebEditor)]
 pub fn web_editor(dom: &str) -> Result<(), JsValue> {
-    let window = web_sys::window().expect("no global `window` exists"); //window 객체를 러스트에서 다룰 수 있도록 가져옴
-    let document = window.document().expect("should have a document on window"); //마찬가지로 document 객체를 가져올 수 있도록 가져옴
+    let window = web_sys::window().expect("no global `window` exists");                 // Get `window` object
+    let document = window.document().expect("should have a document on window");    // Get 'document' object
     let ele = &format!("{}", dom);
     let wrapper = document.query_selector(&ele).unwrap().unwrap().dyn_into::<web_sys::HtmlElement>().unwrap(); //javascript(index.html)에서 입력한 id를 가져옴
     wrapper.set_class_name("wasm-editor"); //해당 div의 클래스를 가져온다.
