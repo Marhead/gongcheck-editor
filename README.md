@@ -23,4 +23,13 @@ $ cargo build --target wasm32-unknown-unknown --release
 
 this step will generate `.wasm` file at `/target/wasm32-unknwon-unknown`.
 
-3. 
+3. Execute command `wasm-pack build --release --target web`.
+
+## Serve
+
+1. Use python's simple web-server package for testing
+
+```shell
+python -m http.server
+```
+

@@ -3,7 +3,8 @@ use gloo::{events::EventListener};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::JsCast;
-use web_sys::{Document, Element, HtmlElement};
+use web_sys::InputEvent;
+use web_sys::{Document, Element, HtmlElement, console};
 use pulldown_cmark::{html, Parser};
 
 #[wasm_bindgen(js_name = WebEditor)]
@@ -16,7 +17,19 @@ pub fn web_editor(dom: &str) -> Result<(), JsValue> {
     let editor = document.create_element("div")?;                                           // div를 하나 생성
     editor.set_class_name("wasm-content");
     editor.set_attribute("contenteditable", "true")?;                                                // 편집 가능한 div로 속성을 정함
-    editor.set_inner_html("<p><br></p>");                                                           // 개행(엔터) 처리가 될 때 p태그가 추가되게 하기 위하여 초기값으로 <p> 태그를 넣어준다.
+    editor.set_inner_html("<p><br></p>");
+    
+    // Set up an event listener for input events on the editor
+    let editor_clone = editor.clone();
+    let closure = Closure::wrap(Box::new(move |_event: web_sys::InputEvent| {
+        let editor = editor_clone.dyn_ref::<HtmlElement>().unwrap();
+        let text = editor.inner_text(); // Get the current text from the editor
+        console::log_1(&text.into()); // Print the text to the console
+    }) as Box<dyn FnMut(_)>);
+
+    editor.add_event_listener_with_callback("input", closure.as_ref().unchecked_ref())?;
+    closure.forget(); // Note: this leaks memory; for a real application, you should manage closures' lifetimes more carefully
+                                             // 개행(엔터) 처리가 될 때 p태그가 추가되게 하기 위하여 초기값으로 <p> 태그를 넣어준다.
 
     /** 툴바 추가 **/
     let toolbar = document.create_element("div").unwrap();                                  // 툴바의 부모 div
