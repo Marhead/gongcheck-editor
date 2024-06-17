@@ -3,23 +3,24 @@ use gloo::{events::EventListener};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::JsCast;
+use web_sys::{Document, Element, HtmlElement};
+use pulldown_cmark::{html, Parser};
 
 #[wasm_bindgen(js_name = WebEditor)]
 pub fn web_editor(dom: &str) -> Result<(), JsValue> {
-    let window = web_sys::window().expect("no global `window` exists");                 // Get `window` object
-    let document = window.document().expect("should have a document on window");    // Get 'document' object
-    let ele = &format!("{}", dom);
-    let wrapper = document.query_selector(&ele).unwrap().unwrap().dyn_into::<web_sys::HtmlElement>().unwrap(); //javascript(index.html)에서 입력한 id를 가져옴
-    wrapper.set_class_name("wasm-editor"); //해당 div의 클래스를 가져온다.
-    let editor = document.create_element("div")?; //div를 하나 생성
+    let document = web_sys::window().unwrap().document().unwrap();                          // Get `document` object
+    
+    let wrapper = document.query_selector(dom)?.unwrap().dyn_into::<HtmlElement>()?;    // javascript(index.html)에서 입력한 id를 가져옴
+    wrapper.set_class_name("wasm-editor");                                                           // 해당 div의 클래스를 가져온다.
+    
+    let editor = document.create_element("div")?;                                           // div를 하나 생성
     editor.set_class_name("wasm-content");
-    editor.set_attribute("contenteditable", "true"); //편집 가능한 div로 속성을 정함
-    editor.set_attribute("placeholder", "내용을 입력하세요."); //placeholder 속성이나 div에는 동작하지 않음. 추후 기능을 넣기 위해 넣은 요소
-    editor.set_inner_html("<p><br></p>"); //개행(엔터) 처리가 될 때 p태그가 추가되게 하기 위하여 초기값으로 <p> 태그를 넣어준다.
+    editor.set_attribute("contenteditable", "true")?;                                                // 편집 가능한 div로 속성을 정함
+    editor.set_inner_html("<p><br></p>");                                                           // 개행(엔터) 처리가 될 때 p태그가 추가되게 하기 위하여 초기값으로 <p> 태그를 넣어준다.
 
     /** 툴바 추가 **/
-    let toolbar = document.create_element("div").unwrap(); //툴바의 부모 div
-    toolbar.set_class_name("wasm-toolbar"); //css를 위해 클래스를 설정해줌.
+    let toolbar = document.create_element("div").unwrap();                                  // 툴바의 부모 div
+    toolbar.set_class_name("wasm-toolbar");                                                         //css를 위해 클래스를 설정해줌.
 
     let textleft = document.create_element("button").unwrap();     // document.createElement('button')
     textleft.set_class_name("toolbar-menu text-align-left");                // textleft.className
@@ -67,8 +68,32 @@ pub fn web_editor(dom: &str) -> Result<(), JsValue> {
     hyperlink.set_class_name("toolbar-menu hyperlink");
     hyperlink.set_inner_html(&"A");
     
-    wrapper.append_child(&toolbar); // 에디터내에 툴바 div를 추가.
-    wrapper.append_child(&editor); // 추가
+    wrapper.append_child(&toolbar)?; // 에디터내에 툴바 div를 추가.
+    wrapper.append_child(&editor)?; // 추가
     
     Ok(()) //리턴
 }
+
+pub fn markdown_to_html(markdown: &str) -> String {
+    let parser = Parser::new(markdown);
+    let mut html_output = String::new();
+    html::push_html(&mut html_output, parser);
+    html_output
+}
+
+// fn create_and_append_button(document: &Document, parent: &Element, class: &str, inner_html: &str) -> Result<(), JsValue> {
+//     let button = create_element(document, "button", Some(class), Some(inner_html))?;
+//     parent.append_child(&button)?;
+//     Ok(())
+// }
+
+// fn create_element(document: &Document, tag: &str, class_name: Option<&str>, inner_html: Option<&str>) -> Result<Element, JsValue> {
+//     let element = document.create_element(tag)?;
+//     if let Some(class_name) = class_name {
+//         element.set_class_name(class_name);
+//     }
+//     if let Some(inner_html) = inner_html {
+//         element.set_inner_html(inner_html);
+//     }
+//     Ok(element)
+// }

@@ -11,5 +11,6 @@ crate-type = ["cdylib"]
 [dependencies]
 gloo = "0.11.0"
 js-sys = "0.3.69"
+pulldown-cmark = "0.11.0"
 wasm-bindgen = "0.2.92"
 web-sys = "0.3.69"
