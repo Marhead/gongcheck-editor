@@ -5,13 +5,19 @@
     </head>
     <body>
         <h1>GongCheck Editor</h1>
-        <div id="WebEditor"></div>
+        <div id="editor"></div>
+        <dio id="preview"></dio>
         <script type="module">
-            import init, * as Editor from './pkg/gongcheck_editor.js';
+            import init, { WebEditor } from './pkg/gongcheck_editor.js';
+            
             async function execute() {
-                console.log(Editor);
                 await init();
-                var test = Editor.WebEditor("#WebEditor");
+                try {
+                    const editor = new WebEditor("#editor", "#preview");
+                    editor.set_content("# Hello, Markdown!\n\nThis is a **test**.");
+                } catch (error) {
+                    console.error("Error initializing editor:", error);
+                }
             }
             execute();
         </script>
