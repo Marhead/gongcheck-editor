@@ -32,4 +32,3 @@ this step will generate `.wasm` file at `/target/wasm32-unknwon-unknown`.
 ```shell
 python -m http.server
 ```
-
