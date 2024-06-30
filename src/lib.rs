@@ -1,5 +1,4 @@
 extern crate wasm_bindgen; 
-use gloo::{events::EventListener};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::JsCast;
